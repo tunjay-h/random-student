@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Experiment</title>
+    <style>
+        .box {
+            border: 1px solid black;
+            padding: 50px;
+            margin: 6px;
+            border-radius: 4px;
+        }
+
+        .box:hover {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="display: flex; height: 90vh; flex-direction: column; border: 1px solid black; border-radius: 6px;
+        justify-content: center; align-items: center; margin: 0 20%; background-color: #cccccc;">
+        <div style=" margin: 0 auto; width: 80%;
+            display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+            <div id='box1' class="box">1</div>
+            <div id='box2' class="box">2</div>
+            <div id='box3' class="box">3</div>
+            <div id='box4' class="box">4</div>
+            <div id='box5' class="box">5</div>
+            <div id='box6' class="box">6</div>
+            <div id='box7' class="box">7</div>
+            <div id='box8' class="box">8</div>
+            <div id='box9' class="box">9</div>
+            <div id='box10' class="box">10</div>
+            <div id='box11' class="box">11</div>
+            <div id='box12' class="box">12</div>
+            <div id='box13' class="box">13</div>
+            <div id='box14' class="box">14</div>
+            <div id='box15' class="box">15</div>
+            <div id='box16' class="box">16</div>
+            <div id='box17' class="box">17</div>
+            <div id='box18' class="box">18</div>
+            <div id='box19' class="box">19</div>
+            <div id='box20' class="box">20</div>
+            <div id='box21' class="box">21</div>
+            <div id='box22' class="box">22</div>
+        </div>
+
+        <button id='goRandom' onclick="main();">Go Random</button>
+    </div>
+
+    <script>
+        let currentBoxId = '', visited = 0;
+
+        function generateRandomUserID() {
+            let id = Math.floor(Math.random() * 22) + 1
+            return id
+        }
+
+        function main() {
+            if (visited == 0) {
+                goRandom();
+                visited = 1;
+            }
+            else if (visited == 1) {
+                reset(); 
+                visited = 0;
+                main();
+            }
+        }
+
+        function reset() {
+            document.getElementById(currentBoxId).style.backgroundColor = ''; // back to default
+        }
+
+        function goRandom() {
+            let randomId = generateRandomUserID();
+            let boxId = 'box' + randomId;
+
+            document.getElementById(boxId).style.backgroundColor = 'red';
+            currentBoxId = boxId;
+        }
+    </script>
+</body>
+
+</html>
