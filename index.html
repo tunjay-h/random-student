@@ -3,77 +3,31 @@
 
 <head>
     <title>Experiment</title>
-    <style>
-        .main {
-            display: flex;
-            height: 90vh;
-            flex-direction: column;
-            border: 1px solid black;
-            border-radius: 6px;
-            justify-content: center;
-            align-items: center;
-            margin: 0 20%;
-            background-color: #cccccc;
-        }
 
-        .box-container {
-            margin: 0 auto;
-            width: 80%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .box {
-            border: 1px solid black;
-            padding: 50px;
-            margin: 6px;
-            border-radius: 4px;
-        }
-
-        .box:hover, .box:active {
-            background-color: green;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="main">
-        <div class="box-container">
-            <div id='box1' class="box">1</div>
-            <div id='box2' class="box">2</div>
-            <div id='box3' class="box">3</div>
-            <div id='box4' class="box">4</div>
-            <div id='box5' class="box">5</div>
-            <div id='box6' class="box">6</div>
-            <div id='box7' class="box">7</div>
-            <div id='box8' class="box">8</div>
-            <div id='box9' class="box">9</div>
-            <div id='box10' class="box">10</div>
-            <div id='box11' class="box">11</div>
-            <div id='box12' class="box">12</div>
-            <div id='box13' class="box">13</div>
-            <div id='box14' class="box">14</div>
-            <div id='box15' class="box">15</div>
-            <div id='box16' class="box">16</div>
-            <div id='box17' class="box">17</div>
-            <div id='box18' class="box">18</div>
-            <div id='box19' class="box">19</div>
-            <div id='box20' class="box">20</div>
-            <div id='box21' class="box">21</div>
-            <div id='box22' class="box">22</div>
+        <div id='studentBoxes' class="box-container">
+
         </div>
 
         <button id='goRandom' onclick="main();">Go Random</button>
     </div>
 
     <script>
+        if (localStorage.getItem("joinStds") === null) {
+            localStorage.setItem("joinStds", JSON.stringify(Array(22).fill(false)));
+        }
+
+
+
         let currentBoxId = '', visited = 0;
 
         function generateRandomUserID() {
-            let id = Math.floor(Math.random() * 22) + 1
-            return id
+            let id = Math.floor(Math.random() * 22);
+            return id;
         }
 
         function main() {
@@ -94,10 +48,72 @@
 
         function goRandom() {
             let randomId = generateRandomUserID();
-            let boxId = 'box' + randomId;
 
-            document.getElementById(boxId).style.backgroundColor = 'red';
-            currentBoxId = boxId;
+            let joinStudentsArr = JSON.parse(localStorage.getItem('joinStds'));
+
+            if (joinStudentsArr.every(function (elem) { return elem === true })) {
+                joinStudentsArr = Array(22).fill(false);
+                localStorage.setItem("joinStds", JSON.stringify(joinStudentsArr));
+
+            } else if (joinStudentsArr[randomId] === true) {
+                goRandom();
+            } else {
+                joinStudentsArr[randomId] = true;
+                localStorage.setItem("joinStds", JSON.stringify(joinStudentsArr));
+
+                let boxId = 'box' + randomId;
+                document.getElementById(boxId).style.backgroundColor = 'green';
+                currentBoxId = boxId;
+            }
+
+        }
+
+        let students_arr = [{ "name": "1 Abbasov Cavid Faiq" },
+        { "name": "2 Abbasov İlqar Sabir" },
+        { "name": "3 Cabbarzadə Orxan Abdulla" },
+        { "name": "4 Cavadov Fərhad Əlihüseyn" },
+        { "name": "5 Əhmədov Elmir Nəcməddin" }, { "name": "6 Əhmədov Mahmud Ramiz" }, { "name": "7 Əhmədov Rəsul Nəcməddin" }, { "name": "8 Əkbərzadə Orxan Natiq" }, { "name": "9 Əliyev Araz Polad" }, { "name": "10 Hüseynov Zamin Əlizamin" }, { "name": "11 Qədirli İslam Elçin" }, { "name": "12 Quliyeva Aysu Seymur" }, { "name": "13 Qurbanov Kənan Famil" }, { "name": "14 Mansurov Mirməhəmməd Xəyal" }, { "name": "15 Mövlamov Fariz Ayaz" }, { "name": "16 Nağıyev Müşfiq Müslüm" }, { "name": "17 Nəcəfov Məhərrəm Ramiq" }, { "name": "18 Nuriyeva Banuçiçək Zaur" }, { "name": "19 Osmanlı Nəzrin Kamran" }, { "name": "20 Sadıqlı Əli Nüsrət" }, { "name": "21 Şəfiyev Murad Şahin" }, { "name": "22 Tağızadə Məhəmməd Fizuli" }]
+
+
+
+        for (let i = 0; i < students_arr.length; i++) {
+            let elem = students_arr[i].name;
+            //const stdbox = document.createElement('div');
+            // stdbox.id = 'box' + i;
+            // stdbox.classList.add('box');
+            // stdbox.innerHTML = elem;
+
+
+            const card_container = document.createElement('div');
+            card_container.id = 'box' + i;
+            card_container.classList.add("card");
+            card_container.addEventListener('click', function () {
+                card_container.classList.toggle('is-flipped');
+            });
+
+
+            const card_front = document.createElement('div');
+            card_front.classList.add("card__face", "card__face--front");
+            card_front.innerHTML = i + 1;
+
+            const card_back = document.createElement('div');
+            card_back.classList.add("card__face", "card__face--back");
+            card_back.innerHTML = elem;
+
+            card_container.append(card_front, card_back);
+
+            document.getElementById('studentBoxes').append(card_container);
+
+        }
+
+
+        let joinStudentsArr = JSON.parse(localStorage.getItem('joinStds'));
+
+        for (let index = 0; index < joinStudentsArr.length; index++) {
+            const element = joinStudentsArr[index];
+            if (element === true) {
+                document.getElementById('box' + index).style.backgroundColor = 'yellow';
+            }
         }
     </script>
 </body>
